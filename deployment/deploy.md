@@ -1,0 +1,12 @@
+deployment (iirc):
+- fresh linux centos8 instance [8.2.2004 (Core)]
+- firewall open on port 80
+- used default user with sudo (user's group) permissions
+- sudo yum install git, gcc, python3-devel
+- sudo pip3 install prometheus_client, web3
+- sudo cd /opt
+- sudo git clone https://github.com/jernejml/MakerMonitorTools.git
+- sudo vi testing.py (modified port to 80)
+- sudo cp daicollect.service /var/run/systemd/system
+- sudo systemctl daemon-reload
+- sudo systemctl start daicollect
