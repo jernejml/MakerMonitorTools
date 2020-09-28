@@ -4,10 +4,14 @@ import urllib
 import locale
 import time
 import random
+import yaml
 from prometheus_client import start_http_server, Gauge
 
-with open('keys.txt', 'r') as myfile:
-    keys=json.load(myfile)
+with open('keys.yml', 'r') as stream:
+    try:
+        keys = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print("Can't read keys: " + exc)
 
 os.environ['WEB3_INFURA_API_KEY'] = keys["infura-api"]
 
