@@ -4,7 +4,7 @@ Description=collect Dai flows
 [Service]
 Type=simple
 WorkingDirectory=/opt/MakerMonitorTools/DaiBalanceExporter
-ExecStart=/bin/sh -c "sudo python3 /opt/MakerMonitorTools/DaiBalanceExporter/testing.py 1>/tmp/daistdout 2>/tmp/daistderr"
+ExecStart=/bin/sh -c "sudo python3 /opt/MakerMonitorTools/DaiBalanceExporter/exporter.py 1>/tmp/daistdout 2>/tmp/daistderr"
 
 KillMode=control-group
 Restart=no
