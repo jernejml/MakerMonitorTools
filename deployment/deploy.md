@@ -6,7 +6,7 @@ deployment (iirc):
 - sudo pip3 install prometheus_client, web3
 - sudo cd /opt
 - sudo git clone https://github.com/jernejml/MakerMonitorTools.git
-- sudo vi testing.py (modified port to 80)
+- sudo vi exporter.py.py (modified port to 80)
 - sudo cp daicollect.service /var/run/systemd/system
 - sudo systemctl daemon-reload
 - sudo systemctl start daicollect
