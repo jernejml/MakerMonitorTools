@@ -1,0 +1,23 @@
+# Wrapped in quotes to avoid parsing into ints
+"0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11":
+  desc: Uniswap V2
+"0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7":
+  desc: Curve Pool DAI/USDC/USDT
+"0x3031745E732dcE8fECccc94AcA13D5fa18F1012d":
+  desc: Balancer Pool DAI/SAFE
+"0xA5407eAE9Ba41422680e2e00537571bcC53efBfD":
+  desc: Curve Pool DAI/USDC/USDT/sUSD
+"0xC3D03e4F041Fd4cD388c549Ee2A29a9E5075882f":
+  desc: SushiSwap
+"0x16de59092dAE5CcF4A1E6439D611fd0653f0Bd01":
+  desc: iearn DAI (yDAI)
+"0x3dfd23A6c5E8BbcFc9581d2E864a68feb6a076d3":
+  desc: Aave Lending Pool
+"0xfB76E9be55758d0042e003c1E46E186360F0627e":
+  desc: Aragon smth?
+"0xfB76E9be55758d0042e003c1E46E186360F0627e":
+  desc: Another Aragon?
+"0x16cAC1403377978644e78769Daa49d8f6B6CF565":
+  desc: Balancer Pool DAI/YFII
+"0x6DCb8492B5De636fD9e0a32413514647D00eF8D0":
+  desc: Wallet address
