@@ -35,7 +35,9 @@ with open('topContracts.yml', 'r') as stream:
         print(exc)
         quit()
 
+# https://changelog.makerdao.com/releases/mainnet/1.1.2/contracts.json
 daiAddress = w3.toChecksumAddress('0x6b175474e89094c44da98b954eedeac495271d0f')
+potAddress = w3.toChecksumAddress('0x197E90f9FAD81970bA7976f33CbD77088E5D7cf7')
 
 def loadContract(address):
     abisite = f'http://api.etherscan.io/api?module=contract&action=getabi&address={address}&apikey={keys["etherscan-api"]}&format=raw'
@@ -43,23 +45,47 @@ def loadContract(address):
         abi = json.loads(url.read())
     return w3.eth.contract(address = address, abi = abi)
 
+
 def contractDaiBalance(address):
     DAIBalance = daiContract.functions.balanceOf(address).call()
     balanceEth = w3.fromWei(DAIBalance, 'ether')
     return balanceEth
+
+
+def contractDaiTotalSupply():
+    erc20_dai_supply = daiContract.functions.totalSupply().call()
+    balanceEth = w3.fromWei(erc20_dai_supply, 'ether')
+    return balanceEth
+
+
+def dsrBalance():
+    dsr_balance = potContract.functions.Pie().call()
+    chi = potContract.functions.chi().call()
+    multiply = dsr_balance*chi/10**27
+    balance_eth = w3.fromWei(multiply, 'ether')
+    return balance_eth
+
 
 balanceGauge = Gauge(
     'top_contracts_dai_balance',
     'Top contracts DAI balance',
     labelnames = ['contract'])
 
+erc20_dsr_Gauge = Gauge(
+    'dai_ERC20_dsr',
+    'ERC20 (floating supply) vs dai in DSR',
+    labelnames = ['supply'])
+
 start_http_server(8000)
 
 # load the contracts
 daiContract = loadContract(daiAddress)
+potContract = loadContract(potAddress)
 
 while True:
     for contractAddress in topDaiHolderContracts:
         balanceGauge.labels(contract = topDaiHolderContracts[contractAddress]['desc']).set(contractDaiBalance(contractAddress))
 
+    erc20_dsr_Gauge.labels(supply='ERC20').set(contractDaiTotalSupply())
+    erc20_dsr_Gauge.labels(supply='DSR').set(dsrBalance())
     time.sleep(10)
