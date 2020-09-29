@@ -43,11 +43,11 @@ def loadContract(address):
     abisite = f'http://api.etherscan.io/api?module=contract&action=getabi&address={address}&apikey={keys["etherscan-api"]}&format=raw'
     with urllib.request.urlopen(abisite) as url:
         abi = json.loads(url.read())
-    return w3.eth.contract(address = address, abi = abi)
+    return w3.eth.contract(address = w3.toChecksumAddress(address), abi = abi)
 
 
 def contractDaiBalance(address):
-    DAIBalance = daiContract.functions.balanceOf(address).call()
+    DAIBalance = daiContract.functions.balanceOf(w3.toChecksumAddress(address)).call()
     balanceEth = w3.fromWei(DAIBalance, 'ether')
     return balanceEth
 
