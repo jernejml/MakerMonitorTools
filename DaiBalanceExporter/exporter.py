@@ -60,7 +60,9 @@ def contractDaiTotalSupply():
 
 def dsrBalance():
     dsr_balance = potContract.functions.Pie().call()
-    balance_eth = w3.fromWei(dsr_balance, 'ether')
+    chi = potContract.functions.chi().call()
+    multiply = dsr_balance*chi
+    balance_eth = w3.fromWei(multiply, 'ether')
     return balance_eth
 
 
