@@ -5,14 +5,23 @@ import locale
 import time
 import random
 import yaml
+import logging
+from logging.handlers import RotatingFileHandler
 from prometheus_client import start_http_server, Gauge
+
+logger = logging.getLogger(__name__)
+formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+handler = RotatingFileHandler('exporter.log', maxBytes = 100 * 1024 * 1024, backupCount = 5)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 # get the keys
 with open('keys.yml', 'r') as stream:
     try:
         keys = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
-        print(exc)
+        logging.exception("Failed to read keys ...")
         quit()
 
 os.environ['WEB3_INFURA_API_KEY'] = keys["infura-api"]
@@ -20,9 +29,9 @@ os.environ['WEB3_INFURA_API_KEY'] = keys["infura-api"]
 from web3.auto.infura import w3
 
 if w3.isConnected() == True:
-    print("Connected to the ethereum network")
+    logger.info("Connected to the ethereum network")
 else:
-    print("Can't connect to the eth network")
+    logger.error("Can't connect to the eth network")
     quit()
 
 locale.setlocale(locale.LC_ALL, '')
@@ -32,7 +41,7 @@ with open('topContracts.yml', 'r') as stream:
     try:
         topDaiHolderContracts = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
-        print(exc)
+        logger.exception('Failed to read topContracts')
         quit()
 
 # https://changelog.makerdao.com/releases/mainnet/1.1.2/contracts.json
@@ -49,12 +58,14 @@ def loadContract(address):
 def contractDaiBalance(address):
     DAIBalance = daiContract.functions.balanceOf(w3.toChecksumAddress(address)).call()
     balanceEth = w3.fromWei(DAIBalance, 'ether')
+    logger.debug(f'Address {address} holds {balanceEth:n} DAI')
     return balanceEth
 
 
 def contractDaiTotalSupply():
     erc20_dai_supply = daiContract.functions.totalSupply().call()
     balanceEth = w3.fromWei(erc20_dai_supply, 'ether')
+    logger.debug(f'Total DAI supply is {balanceEth:n}')
     return balanceEth
 
 
@@ -63,6 +74,7 @@ def dsrBalance():
     chi = potContract.functions.chi().call()
     multiply = dsr_balance*chi/10**27
     balance_eth = w3.fromWei(multiply, 'ether')
+    logger.debug(f'DSR locked value is {balance_eth:n} DAI')
     return balance_eth
 
 
